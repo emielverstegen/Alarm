@@ -1,0 +1,276 @@
+#:kivy 1.0
+
+<AlarmApp>:
+	BoxLayout:
+		size: root.size
+		
+		Accordion:
+			orientation: 'horizontal'
+
+			AccordionItem:
+				title: 'Clock'
+				collapse:False
+				background_normal:'images/AccordionUnselected.png'
+				background_selected:'images/AccordionSelected.png'
+
+
+				Label:
+					text: root.clock_string
+					font_size:'150sp'
+					color:[0.8, 0.1, 0.1, 0.6]
+
+			AccordionItem:
+				title: 'Alarms'
+				background_normal:'images/AccordionUnselected.png'
+				background_selected:'images/AccordionSelected.png'
+				
+				ScrollView:
+					#size_hint:(1, 1)
+					#size:(Window.width, Window.height)
+					StackLayout:
+						id:Alarm_Overview_Stack
+						size_hint_y:None
+						
+
+			AccordionItem:
+				title: 'Set alarm'
+				background_normal:'images/AccordionUnselected.png'
+				background_selected:'images/AccordionSelected.png'	
+				
+				BoxLayout:
+					orientation:'vertical'
+					spacing:200
+					GridLayout:
+						cols:3
+						row_force_default:True
+						row_default_height:80
+						
+						Label:
+							text: 'Hour:'
+							font_size:app.label_size
+							size_hint_x: app.set_alarm_label_width 
+							text_size:(100,None)
+							halign: 'left'
+							
+						Label:
+							text: str(int(HourSlider.value))
+							font_size:app.label_size
+							size_hint_x: app.set_alarm_value_width
+						
+						Slider:
+							id:HourSlider
+							orientation:'horizontal'
+							value:6
+							min:0
+							max:23
+							
+						Label:
+							text: 'Minute:'
+							font_size:app.label_size
+							size_hint_x: app.set_alarm_label_width 
+							text_size:(100,None)
+							halign: 'left'
+							
+						
+						Label:
+							text: str(int(MinuteSlider.value))
+							font_size:app.label_size
+							size_hint_x: app.set_alarm_value_width
+						
+						Slider:
+							id:MinuteSlider
+							orientation:'horizontal'
+							value:0
+							min:0
+							max:59
+							
+							
+						
+						Label:
+							text: 'Snooze:'
+							font_size:app.label_size
+							size_hint_x: app.set_alarm_label_width 
+							text_size:(100,None)
+							halign: 'left'
+						
+						Label:
+							text: str(int(SnoozeSlider.value))
+							font_size:app.label_size
+							size_hint_x: app.set_alarm_value_width
+						
+						Slider:
+							id:SnoozeSlider
+							orientation:'horizontal'
+							value:7
+							min:1
+							max:30
+					
+						Label:
+							text: 'Light:'
+							font_size:app.label_size
+							size_hint_x: app.set_alarm_label_width 
+							text_size:(100,None)
+							halign: 'left'
+							
+						Label:
+							text: str(int(WULSlider.value))
+							font_size:app.label_size
+							size_hint_x: app.set_alarm_value_width
+						
+						Slider:
+							id:WULSlider
+							orientation:'horizontal'
+							value:5
+							min:0
+							max:30
+						
+						
+						
+					GridLayout:
+						cols:3
+						row_force_default:True
+						row_default_height:60	
+						
+						Button:
+							text:'Pick sound'
+							on_press:root.sound_popup()
+							
+						Button:
+							text:'Pick color'
+							on_press:root.color_popup()
+						
+						Button:
+							text:'Set alarm'
+							on_press:root.set_alarm(int(HourSlider.value),int(MinuteSlider.value),int(SnoozeSlider.value),int(WULSlider.value))
+				
+			AccordionItem:
+				title: 'Lamp'
+				background_normal:'images/AccordionUnselected.png'
+				background_selected:'images/AccordionSelected.png'
+				Button:
+					text:'Test'
+					on_press:root.testfunction()
+				
+			AccordionItem:
+				title: 'Music'
+				background_normal:'images/AccordionUnselected.png'
+				background_selected:'images/AccordionSelected.png'
+				
+				
+<SoundPopup@Popup>:
+	title:'Choose wake-up-sound'
+	BoxLayout:
+		orientation: "vertical"
+		
+		Label:
+			text: 'SoundPopup'
+		Button:
+			text: "Dismiss"
+			size_hint_y: None
+			height: "40dp"
+			on_release: root.dismiss()
+			
+			
+<AlarmPopup@Popup>:
+	title:'Alarm!'
+	BoxLayout:
+		orientation: "vertical"
+		
+		Label:
+			text: 'Goooodmorning! Wakeup!'
+		Button:
+			text: "Snooze"
+			size_hint_y: None
+			height: "40dp"
+			on_release: root.snooze_alarm()
+		Button:
+			text: "Dismiss"
+			size_hint_y: None
+			height: "40dp"
+			on_release: root.dismiss_alarm()
+			
+<ColorPopup@Popup>:
+	title:'Choose wake-up-color'
+	BoxLayout:
+		orientation:'vertical'
+		spacing:200
+		GridLayout:
+			cols:2
+			row_force_default:True
+			row_default_height:80
+			
+			Label:
+				text: 'Red:'
+				font_size:app.label_size
+				size_hint_x: app.pick_color_label_width 
+				text_size:(100,None)
+				halign: 'left'
+			
+			Slider:
+				id:RedSlider
+				orientation:'horizontal'
+				value:0
+				min:0
+				max:255
+				on_value:root.test_color(testcolor_button.state,RedSlider.value,GreenSlider.value,BlueSlider.value,WhiteSlider.value)
+				
+			Label:
+				text: 'Green:'
+				font_size:app.label_size
+				size_hint_x: app.pick_color_label_width 
+				text_size:(100,None)
+				halign: 'left'
+			
+			Slider:
+				id:GreenSlider
+				orientation:'horizontal'
+				value:0
+				min:0
+				max:255
+				on_value:root.test_color(testcolor_button.state,RedSlider.value,GreenSlider.value,BlueSlider.value,WhiteSlider.value)
+				
+			Label:
+				text: 'Blue:'
+				font_size:app.label_size
+				size_hint_x: app.pick_color_label_width 
+				text_size:(100,None)
+				halign: 'left'
+			
+			Slider:
+				id:BlueSlider
+				orientation:'horizontal'
+				value:0
+				min:0
+				max:255
+				on_value:root.test_color(testcolor_button.state,RedSlider.value,GreenSlider.value,BlueSlider.value,WhiteSlider.value)
+				
+			Label:
+				text: 'White:'
+				font_size:app.label_size
+				size_hint_x: app.pick_color_label_width 
+				text_size:(100,None)
+				halign: 'left'
+			
+			Slider:
+				id:WhiteSlider
+				orientation:'horizontal'
+				value:0
+				min:0
+				max:255
+				on_value:root.test_color(testcolor_button.state,RedSlider.value,GreenSlider.value,BlueSlider.value,WhiteSlider.value)
+						
+			
+		GridLayout:
+			cols:2
+			row_force_default:True
+			row_default_height:60	
+			
+			ToggleButton:
+				id:testcolor_button
+				text:'Test color'
+				on_state:root.test_color(self.state,RedSlider.value,GreenSlider.value,BlueSlider.value,WhiteSlider.value)
+				
+			Button:
+				text:'Pick color'
+				on_press:root.pick_color(RedSlider.value,GreenSlider.value,BlueSlider.value,WhiteSlider.value)
+			
